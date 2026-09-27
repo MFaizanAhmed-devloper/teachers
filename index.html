@@ -18,26 +18,30 @@
    01 — TOKENS
    ============================================================ */
 :root{
-  --navy-900:#173b3a;
-  --navy-800:#205656;
-  --navy-700:#28736b;
-  --navy-600:#3d9384;
+  --navy-900:#14243a;
+  --navy-800:#1e3655;
+  --navy-700:#2b4c70;
+  --navy-600:#426584;
 
-  --ink:#183c3d;
-  --ink-2:#315657;
-  --body:#4a6260;
-  --muted:#718783;
+  --ink:#1c2a3b;
+  --ink-2:#405266;
+  --body:#596778;
+  --muted:#778494;
 
   --ivory:#fff8ed;
   --paper:#fffefa;
-  --paper-2:#f0faf6;
-  --line:#d7e9e0;
-  --line-strong:#afcec1;
+  --paper-2:#f7f3eb;
+  --line:#e9e0d2;
+  --line-strong:#d3c3a6;
 
-  --gold:#e08a38;
-  --gold-dark:#b85b30;
-  --gold-soft:#ffd08a;
-  --blue:#277c8c;
+  --gold:#bd9856;
+  --gold-dark:#92713c;
+  --gold-soft:#e7d4aa;
+  --blue:#4a7298;
+  --accent-rose:#a44f78;
+  --accent-teal:#2b7b83;
+  --accent-lavender:#765aa0;
+  --accent-coral:#bd604d;
   --cyan:#38bdf8;
   --teal:#2dd4bf;
   --violet:#8b5cf6;
@@ -70,27 +74,14 @@ body{
   font-family:var(--font-body);
   font-size:16px;line-height:1.72;
   color:var(--body);
-  background:
-    radial-gradient(circle at top left, rgba(56,189,248,.14), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(168,85,247,.12), transparent 22%),
-    linear-gradient(180deg, #f8f4ed 0%, #fffdf9 100%);
+  background:linear-gradient(180deg,#f8f5ef 0%,#fffefa 100%);
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
   min-height:100vh;display:flex;flex-direction:column;
   cursor:default;
 }
 
-.mouse-glow{
-  position:fixed;
-  width:220px;height:220px;border-radius:50%;
-  pointer-events:none;z-index:0;opacity:0;
-  background:radial-gradient(circle, rgba(255,193,92,.36) 0%, rgba(59,130,246,.22) 25%, rgba(244,114,182,.14) 45%, transparent 72%);
-  filter:blur(24px);
-  transform:translate(-50%, -50%);
-  transition:opacity .25s ease;
-}
-
-body.has-mouse-glow .mouse-glow{opacity:1}
+body.menu-open{overflow:hidden}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button,input{font:inherit;color:inherit}
@@ -108,10 +99,7 @@ h1,h2,h3,h4{
 .student-meta h1,
 .closing .name,
 .pf-body h2{
-  background:linear-gradient(135deg, var(--navy-900) 0%, var(--blue) 28%, var(--gold-dark) 55%, var(--rose) 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  text-shadow:0 0 1px rgba(16,29,49,.08);
-  display:inline-block;
+  background:none;color:var(--ink);text-shadow:none;
 }
 p{margin:0 0 1rem}
 p:last-child{margin-bottom:0}
@@ -254,11 +242,12 @@ main{flex:1 0 auto}
   transform:translateY(-8px);opacity:0;visibility:hidden;
   transition:opacity .3s ease,transform .3s ease,visibility .3s;
   box-shadow:0 24px 40px -30px rgba(20,25,40,.5);
+  max-height:calc(100dvh - 70px);overflow-y:auto;overscroll-behavior:contain;
 }
 .mobile-menu.is-open{transform:none;opacity:1;visibility:visible}
 .mobile-menu ul{list-style:none;margin:0;padding:0}
 .mobile-menu li+li{border-top:1px solid var(--line)}
-.mobile-menu a{display:block;padding:.95rem 0;font-family:var(--font-display);font-size:1.5rem;color:var(--ink)}
+.mobile-menu a{display:flex;align-items:center;min-height:54px;padding:.75rem 0;font-family:var(--font-display);font-size:1.5rem;color:var(--ink)}
 .mobile-menu a[aria-current="page"]{color:var(--gold-dark)}
 
 @media (max-width:900px){.nav-desktop{display:none}.menu-toggle{display:flex}}
@@ -330,7 +319,8 @@ a:hover .link-arrow span{transform:translateX(4px)}
   line-height:1.6;max-width:14ch;
 }
 .portrait-img{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  object-position:center;
   opacity:0;transform:scale(1.02);
   transition:opacity .9s ease,transform 1.1s cubic-bezier(.2,.7,.3,1);
 }
@@ -348,7 +338,9 @@ a:hover .link-arrow span{transform:translateX(4px)}
   background:
     radial-gradient(880px 460px at 80% -14%,rgba(176,141,79,.17),transparent 62%),
     radial-gradient(680px 420px at 4% 112%,rgba(44,74,117,.55),transparent 66%);
+  animation:heroGlow 18s ease-in-out infinite alternate;
 }
+@keyframes heroGlow{to{transform:scale(1.035);opacity:.78}}
 .hero::after{
   content:"";position:absolute;inset:0;pointer-events:none;
   background-image:
@@ -361,26 +353,18 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .hero-grid{
   position:relative;z-index:2;
   display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
-  gap:clamp(2.5rem,6vw,5rem);align-items:center;
+  gap:clamp(2.5rem,6vw,5rem);align-items:center;min-width:0;
 }
+.hero-grid > *{min-width:0}
 .hero h1{
   color:var(--ivory);font-size:clamp(2.35rem,5.6vw,4.35rem);
   line-height:1.04;letter-spacing:-.02em;font-weight:500;margin:0 0 1.5rem;
 }
 .hero h1 em{font-style:italic;color:var(--gold-soft)}
+.hero-caption{font-family:var(--font-display);font-size:clamp(1.35rem,2.8vw,1.85rem);line-height:1.25;color:var(--gold-soft);margin:0 0 1rem}
+.hero-byline{font-size:.67rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(247,243,234,.64);margin:0 0 1rem}
 .hero .lede{color:rgba(247,243,234,.74);margin-bottom:2.1rem}
 .hero-actions{display:flex;flex-wrap:wrap;gap:.9rem;margin-bottom:2rem}
-.hero-sig{
-  font-family:var(--font-display);font-style:italic;font-size:1.16rem;
-  color:rgba(247,243,234,.6);margin:0;
-}
-.hero-sig::before{content:"— "}
-.hero-sig small{
-  display:inline;font-family:var(--font-body);font-style:normal;
-  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-soft);margin-left:.5rem;
-}
-
 /* Factual stat line */
 .fact-line{
   display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;
@@ -411,16 +395,16 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .contents-head span{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dark)}
 .contents-list{list-style:none;margin:0;padding:0}
 .contents-list a{
-  display:flex;align-items:baseline;gap:.6rem;padding:.6rem 0;
+  display:flex;align-items:baseline;gap:.6rem;padding:.6rem 0;min-width:0;
   border-bottom:1px solid var(--line);transition:color .25s ease, transform .25s ease;
 }
 .contents-list a:hover{transform:translateX(2px)}
 .contents-list li:last-child a{border-bottom:none}
 .contents-list a:hover .c-name{color:var(--gold-dark)}
 .c-num{font-size:.6rem;letter-spacing:.1em;color:var(--muted);font-variant-numeric:tabular-nums;flex-shrink:0;width:1.5rem}
-.c-name{font-family:var(--font-display);font-size:1.28rem;font-weight:700;letter-spacing:.02em;color:var(--navy-700);white-space:nowrap;transition:color .25s,text-shadow .25s ease;text-shadow:0 0 1px rgba(16,29,49,.08)}
-.c-dots{flex:1;border-bottom:1px dotted rgba(176,141,79,.7);transform:translateY(-4px);min-width:1rem}
-.c-subj{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dark);white-space:nowrap; font-weight:600}
+.c-name{font-family:var(--font-display);font-size:1.28rem;font-weight:700;letter-spacing:.02em;color:var(--navy-700);min-width:0;overflow-wrap:anywhere;transition:color .25s,text-shadow .25s ease;text-shadow:0 0 1px rgba(16,29,49,.08)}
+.c-dots{flex:1;border-bottom:1px dotted rgba(176,141,79,.7);transform:translateY(-4px);min-width:0}
+.c-subj{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dark);text-align:right;font-weight:600}
 .contents-principal{
   display:flex;align-items:center;gap:.6rem;margin-top:1rem;padding-top:1rem;
   border-top:1px solid var(--line-strong);
@@ -437,6 +421,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
   gap:clamp(1.75rem,5vw,4.5rem);align-items:start;
 }
 .intro-grid h2{font-size:clamp(1.75rem,3.4vw,2.6rem)}
+#why-this-tribute{scroll-margin-top:90px}
 .signature{
   margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);
   font-family:var(--font-display);font-style:italic;font-size:1.24rem;color:var(--ink);
@@ -517,7 +502,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
    ============================================================ */
 .principal-feature{padding-bottom:clamp(2.25rem,4vw,3.25rem)}
 .pf-card{
-  display:grid;grid-template-columns:200px minmax(0,1fr);
+  display:grid;grid-template-columns:240px minmax(0,1fr);
   background:var(--navy-800);color:var(--ivory);
   border:1px solid var(--navy-700);box-shadow:var(--shadow-m);
   overflow:hidden;position:relative;
@@ -526,7 +511,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .pf-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold)}
 .pf-card:hover{transform:translateY(-3px);box-shadow:0 32px 60px -34px rgba(11,21,36,.6)}
 .pf-portrait{padding:1.35rem}
-.pf-portrait .portrait{aspect-ratio:1/1;border-color:rgba(216,189,138,.24)}
+.pf-portrait .portrait{aspect-ratio:4/5;border-color:rgba(216,189,138,.24)}
 .pf-portrait .portrait-ph{color:#9d8f76}
 .pf-body{padding:clamp(1.5rem,3vw,2.4rem) clamp(1.5rem,3vw,2.4rem) clamp(1.5rem,3vw,2.4rem) 0}
 .pf-body h2{color:var(--ivory);font-size:clamp(1.5rem,2.8vw,2.15rem);margin:1rem 0 .35rem}
@@ -568,35 +553,46 @@ a:hover .link-arrow span{transform:translateX(4px)}
   gap:clamp(1.25rem,2.5vw,2rem);
 }
 .teacher-card{
-  background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(249,249,252,.96) 100%);
-  border:1px solid rgba(205,214,226,.9);border-radius:16px;
+  --card-accent:var(--gold-dark);
+  background:var(--paper);
+  border:1px solid var(--line);border-radius:6px;
   overflow:hidden;display:flex;flex-direction:column;
   transition:transform .38s cubic-bezier(.2,.7,.3,1),box-shadow .38s ease,border-color .38s ease,filter .35s ease;
   position:relative;box-shadow:0 14px 30px -24px rgba(15,23,42,.28);
 }
+.teacher-card[hidden]{display:none}
 .teacher-card::before{
   content:"";position:absolute;inset:0 0 auto 0;height:4px;
-  background:linear-gradient(90deg, var(--cyan), var(--violet), var(--gold), var(--rose));
-  opacity:.9;
+  background:var(--card-accent);opacity:.95;
 }
 .teacher-card::after{
   content:"";position:absolute;left:1.4rem;right:1.4rem;bottom:0;height:2px;
-  background:linear-gradient(90deg, var(--gold), var(--rose));transform:scaleX(0);transform-origin:left;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;
   transition:transform .4s cubic-bezier(.2,.7,.3,1);
 }
-.teacher-card:hover{transform:translateY(-7px) scale(1.01);box-shadow:0 28px 45px -30px rgba(15,23,42,.34);border-color:rgba(176,141,79,.6);filter:saturate(1.08)}
+.teacher-card:hover{transform:translateY(-3px);box-shadow:0 20px 36px -28px rgba(15,23,42,.34);border-color:var(--line-strong)}
 .teacher-card:hover::after{transform:scaleX(1)}
 .teacher-card .portrait{border:none;border-bottom:1px solid rgba(229,222,207,.9);border-radius:0;transition:transform .4s ease}
 .teacher-card:hover .portrait{transform:scale(1.02)}
-.card-link{display:flex;flex-direction:column;height:100%}
 .card-body{padding:1.35rem 1.4rem 1.5rem;display:flex;flex-direction:column;flex:1}
-.card-body h3{font-size:1.72rem;font-weight:700;letter-spacing:.02em;margin-bottom:.35rem;transition:color .25s,color .25s ease;color:var(--navy-800)}
-.teacher-card:hover .card-body h3{filter:brightness(1.05)}
+.card-body h3{font-size:1.72rem;font-weight:700;letter-spacing:.02em;margin-bottom:.35rem;transition:color .25s,color .25s ease;color:var(--card-accent)}
+.teacher-card[data-subject="Chemistry"]{--card-accent:#b66a45}
+.teacher-card[data-subject="Computer"]{--card-accent:var(--accent-teal)}
+.teacher-card[data-subject="Urdu"]{--card-accent:var(--accent-rose)}
+.teacher-card[data-subject="English"]{--card-accent:#3f6f9b}
+.teacher-card[data-subject="Islamic Studies"]{--card-accent:#79833a}
+.teacher-card[data-subject="Mathematics"]{--card-accent:var(--accent-lavender)}
+.teacher-card[data-subject="Physics"]{--card-accent:var(--accent-coral)}
 .card-subj{font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:.85rem}
 .card-badges{margin-bottom:1.1rem;min-height:1.5rem}
-.card-cta{margin-top:auto;padding-top:1rem;border-top:1px solid var(--line)}
-.teacher-card .link-arrow{opacity:.75;transition:opacity .3s ease}
-.teacher-card:hover .link-arrow{opacity:1}
+.teacher-intro{font-size:.9rem;line-height:1.7;color:var(--body);margin:0 0 1.25rem}
+.teacher-card-featured .portrait{aspect-ratio:4/5}
+.btn-card{width:100%;margin-top:auto;min-height:52px;border-radius:4px;background:var(--navy-800);border-color:var(--navy-800);color:var(--ivory);justify-content:space-between;padding:.8rem 1.1rem}
+.btn-card:hover{background:var(--navy-700);border-color:var(--navy-700)}
+.btn-card span{font-size:1.1rem;transition:transform .25s ease}
+.btn-card:hover span{transform:translateX(4px)}
+.teacher-grid-featured{grid-template-columns:repeat(3,minmax(0,1fr))}
+.featured-more{text-align:center;margin:2rem 0 0}
 
 .no-results{
   padding:3.5rem 0;text-align:center;color:var(--muted);
@@ -616,20 +612,37 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .breadcrumb .here{color:var(--ink-2)}
 
 .tribute-hero{
-  display:grid;grid-template-columns:300px minmax(0,1fr);
+  display:grid;grid-template-columns:minmax(270px,340px) minmax(0,1fr);
   gap:clamp(2rem,5vw,4rem);align-items:center;
   padding:clamp(2rem,4vw,3rem) 0 clamp(2.5rem,5vw,3.5rem);
+  border-left:3px solid var(--tribute-accent);
+  background:linear-gradient(110deg,var(--tribute-wash),transparent 72%);
 }
-.tribute-hero .portrait{aspect-ratio:3/4;box-shadow:var(--shadow-m)}
-.tribute-meta h1{font-size:clamp(2.35rem,5.3vw,3.85rem);font-weight:700;letter-spacing:.02em;margin-bottom:.55rem;color:var(--navy-800);text-shadow:0 0 1px rgba(16,29,49,.12)}
-.tribute-subj{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:1.25rem}
+.tribute-hero .portrait{aspect-ratio:4/5;box-shadow:var(--shadow-m)}
+.tribute-meta h1{font-size:clamp(2.35rem,5.3vw,3.85rem);font-weight:700;letter-spacing:.02em;margin-bottom:.55rem;background:none;-webkit-text-fill-color:var(--tribute-accent);color:var(--tribute-accent);text-shadow:none}
+.tribute-meta .eyebrow,.tribute-subj{color:var(--tribute-accent)}
+.tribute-subj{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:1.25rem}
 .tribute-badges{display:flex;flex-wrap:wrap;gap:.5rem}
+.tribute-badges .badge{border-color:var(--tribute-border);color:var(--tribute-accent);background:var(--tribute-wash)}
+
+.tribute-page{
+  --tribute-accent:#b85b30;
+  --tribute-wash:#fff0e7;
+  --tribute-border:#edc3ae;
+}
+.tribute-page[data-subject="computer"]{--tribute-accent:#167b78;--tribute-wash:#e7f6f3;--tribute-border:#b7ded6}
+.tribute-page[data-subject="urdu"]{--tribute-accent:#a34276;--tribute-wash:#faedf4;--tribute-border:#e9c4d8}
+.tribute-page[data-subject="english"]{--tribute-accent:#3269a8;--tribute-wash:#edf3fc;--tribute-border:#c4d6ee}
+.tribute-page[data-subject="islamic"]{--tribute-accent:#78852b;--tribute-wash:#f3f5e5;--tribute-border:#d9dfb0}
+.tribute-page[data-subject="mathematics"]{--tribute-accent:#7652a8;--tribute-wash:#f2edfa;--tribute-border:#d4c5ea}
+.tribute-page[data-subject="physics"]{--tribute-accent:#bb573e;--tribute-wash:#fff0eb;--tribute-border:#ecc3b7}
+.tribute-page[data-subject="principal"]{--tribute-accent:#a87923;--tribute-wash:#fbf3df;--tribute-border:#e8d29e}
 
 /* Motif band */
 .motif-band{
   position:relative;height:132px;overflow:hidden;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  background:linear-gradient(90deg, rgba(7,17,35,.02), rgba(59,130,246,.06), rgba(245,158,11,.06), rgba(244,114,182,.05), rgba(45,212,191,.06), rgba(7,17,35,.02));
+  background:linear-gradient(90deg,var(--tribute-wash),#fffefa 48%,var(--tribute-wash));
   display:flex;align-items:center;justify-content:flex-end;
 }
 .motif-band::before{
@@ -639,7 +652,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
 }
 .motif-band .motif{opacity:.7;max-width:560px;width:100%;padding:0 var(--pad);position:relative;z-index:1}
 @media (max-width:760px){.motif-band{height:96px}.motif-band .motif{opacity:.45}}
-.motif{color:var(--blue)}
+.motif{color:var(--tribute-accent)}
 .motif-svg{width:100%;height:104px;display:block}
 @media (max-width:760px){.motif-svg{height:74px}}
 
@@ -705,7 +718,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
 }
 .tribute-body h2{
   font-size:clamp(1.35rem,2.4vw,1.85rem);margin-bottom:1.5rem;
-  padding-bottom:.75rem;border-bottom:1px solid var(--line);
+  padding-bottom:.75rem;border-bottom:1px solid var(--tribute-border);color:var(--tribute-accent);
 }
 .tribute-prose p{
   font-size:1.055rem;line-height:1.9;color:var(--body);margin-bottom:1.25rem;
@@ -713,9 +726,10 @@ a:hover .link-arrow span{transform:translateX(4px)}
 }
 .tribute-prose p:first-of-type::first-letter{
   font-family:var(--font-display);font-size:3.4rem;line-height:.85;
-  float:left;padding:.16em .12em 0 0;color:var(--gold-dark);
+  float:left;padding:.16em .12em 0 0;color:var(--tribute-accent);
 }
 
+.tribute-page .slot{border-color:var(--tribute-border);background:var(--tribute-wash)}
 .slot{
   border:1px dashed var(--line-strong);background:rgba(255,253,249,.7);
   padding:1.4rem 1.5rem;border-radius:var(--radius);
@@ -729,7 +743,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .appreciate-item:first-child{padding-top:0}
 .appreciate-item:last-child{border-bottom:none}
 .appreciate-item .num{
-  font-family:var(--font-display);font-size:1.05rem;color:var(--gold);
+  font-family:var(--font-display);font-size:1.05rem;color:var(--tribute-accent);
   flex-shrink:0;width:1.9rem;padding-top:.15rem;
 }
 .appreciate-item .slot{flex:1}
@@ -760,7 +774,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
   padding:clamp(2.5rem,5vw,4rem) 0;
 }
 .student-grid{
-  display:grid;grid-template-columns:260px minmax(0,1fr);
+  display:grid;grid-template-columns:300px minmax(0,1fr);
   gap:clamp(2rem,5vw,4rem);align-items:center;
 }
 .student-grid .portrait{aspect-ratio:4/5;box-shadow:var(--shadow-s)}
@@ -768,7 +782,9 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .student-class{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:1.25rem}
 .student-body{padding:clamp(2.5rem,5vw,4rem) 0}
 .student-body h2{font-size:clamp(1.35rem,2.4vw,1.8rem);margin-bottom:1.25rem}
-.student-block{padding-bottom:clamp(2rem,4vw,3rem);margin-bottom:clamp(2rem,4vw,3rem);border-bottom:1px solid var(--line)}
+.student-block{padding:0 0 clamp(2rem,4vw,3rem) 1.25rem;margin:0 0 clamp(2rem,4vw,3rem);border-bottom:1px solid var(--line);border-left:3px solid var(--gold);transition:border-color .35s ease,transform .35s ease}
+.student-block:nth-child(3n + 2){border-left-color:var(--accent-teal)}
+.student-block:nth-child(3n){border-left-color:var(--accent-rose)}
 .student-block:last-of-type{border-bottom:none}
 
 /* ============================================================
@@ -783,7 +799,9 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .note-card{
   background:var(--paper);border:1px solid var(--line);
   border-left:3px solid var(--gold);padding:1.5rem 1.6rem;
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
 }
+.note-card:hover{transform:translateY(-2px);border-color:var(--line-strong);box-shadow:var(--shadow-s)}
 .note-card h3{font-size:1.1rem;margin-bottom:.65rem}
 .note-card p{font-size:.92rem;color:var(--body);margin:0}
 
@@ -840,8 +858,15 @@ a:hover .link-arrow span{transform:translateX(4px)}
   opacity:1;transform:none;
   transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1);
 }
+.teacher-card.reveal.in{transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.3,1),box-shadow .3s ease,border-color .3s ease}
 @keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .page-enter{animation:pageIn .55s cubic-bezier(.2,.7,.3,1) both}
+
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .teacher-card:hover{transform:translateY(-4px)}
+  .pf-card:hover{transform:translateY(-3px)}
+  .nav-desktop a:hover::after{transform:scaleX(1)}
+}
 
 /* ============================================================
    21 — PRINT
@@ -849,42 +874,55 @@ a:hover .link-arrow span{transform:translateX(4px)}
 .print-header,.print-footer{display:none}
 
 @media print{
-  @page{margin:16mm}
-  html,body{background:#fff !important;color:#000 !important}
-  .site-header,.site-footer,.mobile-menu,.skip-link,.menu-toggle,
-  .tribute-actions,.tribute-pager,.breadcrumb,.motif-band,.toast,
-  .opening,.no-print,.hero-actions,.toolbar{display:none !important}
-
-  .print-header{
-    display:flex !important;justify-content:space-between;gap:1rem;
-    border-bottom:1px solid #999;padding-bottom:.6rem;margin-bottom:1.6rem;
-    font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:#444;
+  @page{size:A4 portrait;margin:0}
+  *,*::before,*::after{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    animation:none !important;
+    transition:none !important;
+    letter-spacing:normal !important;
+    text-shadow:none !important;
   }
-  .wrap{max-width:none;padding:0}
-  main{display:block !important}
-  .tribute-hero{grid-template-columns:52mm 1fr;gap:12mm;padding:0 0 10mm;align-items:start}
-  .tribute-hero .portrait{aspect-ratio:4/5;box-shadow:none;border:1px solid #999}
-  .portrait-ph{color:#666}
-  .tribute-hero h1{font-size:26pt}
-  .tribute-subj{color:#666}
-  .badge{border-color:#999 !important;color:#333 !important;background:none !important}
-  .tribute-body{display:block;padding:0}
-  .tribute-body h2{border-bottom:1px solid #ccc;font-size:14pt}
-  .tribute-prose p{font-size:11pt;line-height:1.65;color:#111}
-  .tribute-prose p:first-of-type::first-letter{font-size:30pt;color:#000}
-  .appreciate-list{margin-top:4mm}
-  .appreciate-item{border-bottom:1px solid #ddd;padding:3mm 0}
-  .appreciate-item .num{color:#666}
-  .slot{border:1px dashed #bbb;background:none;padding:3mm}
-  .slot span{color:#555}
-  .print-footer{
-    display:block !important;margin-top:10mm;padding-top:4mm;
-    border-top:1px solid #ccc;font-size:8.5pt;color:#555;
-    letter-spacing:.08em;text-transform:uppercase;
+  html,body{width:210mm !important;min-height:297mm !important;margin:0 !important;background:#fff !important;color:#1c2a3b !important}
+  body{display:block !important;overflow:visible !important}
+  body::before{display:none !important}
+  body > :not(main){display:none !important}
+  main{display:block !important;width:210mm !important;max-width:none !important;margin:0 auto !important;padding:0 !important}
+  .tribute-page{display:block !important;width:210mm !important;margin:0 !important;padding:0 !important;border:0 !important;background:#fff !important}
+  .tribute-page > :not(.print-sheet){display:none !important}
+  .print-sheet{
+    display:flex !important;flex-direction:column;width:210mm;min-height:297mm;margin:0;padding:13mm 15mm 12mm;
+    box-sizing:border-box;border:1px solid #d7c49d;background:#fffefa !important;color:#1c2a3b;
+    font-family:Arial,Helvetica,sans-serif;font-size:10pt;line-height:1.48;
   }
-  a{color:#000 !important;text-decoration:none !important}
-  .reveal{opacity:1 !important;transform:none !important}
-  .page-enter{animation:none !important}
+  .print-sheet *{box-sizing:border-box;letter-spacing:normal !important;text-transform:none !important;animation:none !important;transition:none !important}
+  .print-brand{padding-bottom:4mm;border-bottom:1.5pt solid #b28b49;text-align:center}
+  .print-date{margin:0 0 1mm;color:#79633d;font-size:9pt}
+  .print-brand h1{margin:0;color:#1e3655;font-family:Georgia,"Times New Roman",serif;font-size:25pt;font-weight:600;line-height:1.1}
+  .print-byline{margin:1.5mm 0 0;color:#405266;font-size:9.5pt}
+  .print-identity{display:grid;grid-template-columns:48mm minmax(0,1fr);gap:8mm;align-items:center;margin:8mm 0;padding:0 0 8mm;border-bottom:1px solid #ddd2b9;break-inside:avoid;page-break-inside:avoid}
+  .print-photo{position:relative;width:48mm;aspect-ratio:4/5;overflow:hidden;border:1px solid #d7c49d;background:#f7f3eb}
+  .print-photo:not(.has-image)::before{content:"";position:absolute;inset:2.5mm;border:1px solid #d7c49d;pointer-events:none}
+  .print-initials{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#92713c;font-family:Georgia,"Times New Roman",serif;font-size:25pt}
+  .print-photo.has-image .print-initials{display:none}
+  .print-photo-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;border:0}
+  .print-identity h2{margin:0 0 2mm;color:#1c2a3b;font-family:Georgia,"Times New Roman",serif;font-size:28pt;font-weight:600;line-height:1.05}
+  .print-role{margin:0;color:#6f5834;font-size:10pt}
+  .print-section{margin:0 0 6mm;break-inside:avoid;page-break-inside:avoid}
+  .print-section h3{margin:0 0 2mm;padding-bottom:1.5mm;border-bottom:1px solid #ddd2b9;color:#1e3655;font-family:Georgia,"Times New Roman",serif;font-size:13pt;font-weight:600;line-height:1.2}
+  .print-tribute p,.print-optional p,.print-thanks p{margin:0 0 2.5mm;color:#263447;font-size:10.5pt;line-height:1.55;orphans:3;widows:3}
+  .print-tribute p:last-child,.print-optional p:last-child,.print-thanks p:last-child{margin-bottom:0}
+  .print-appreciation{display:grid;grid-template-columns:1fr 1fr;gap:2mm 4mm;margin:0;padding:0;list-style:none}
+  .print-appreciation li{display:grid;grid-template-columns:7mm minmax(0,1fr);gap:2mm;align-items:start;padding:2.2mm 2.5mm;border:1px solid #e5dcc9;border-left:2px solid var(--print-accent,#92713c);background:#fbf9f4;break-inside:avoid;page-break-inside:avoid;color:#263447;font-size:9.5pt;line-height:1.45}
+  .print-appreciation .num{color:var(--print-accent,#92713c);font-family:Georgia,"Times New Roman",serif;font-size:10pt}
+  .print-optional{padding-left:3mm;border-left:2px solid #bd9856}
+  .print-closing{margin-top:1mm;padding-top:3mm;border-top:1px solid #ddd2b9;break-inside:avoid;page-break-inside:avoid}
+  .print-thanks h3{margin-bottom:1.5mm;border:0;padding:0;font-size:11pt}
+  .print-thanks p{color:#405266;font-style:italic}
+  .print-signoff{margin-top:3mm;color:#405266;font-family:Georgia,"Times New Roman",serif;font-size:10pt}
+  .print-signoff p{margin:0}
+  .print-signoff .print-author{margin-top:1mm;color:#1e3655;font-weight:600}
+  .print-footer{display:block !important;margin-top:4mm;padding-top:2mm;border-top:1px solid #d7c49d;color:#79633d;font-size:8pt;line-height:1.3;text-align:center}
 }
 
 /* ============================================================
@@ -897,24 +935,43 @@ a:hover .link-arrow span{transform:translateX(4px)}
 }
 @media (max-width:860px){
   .intro-grid{grid-template-columns:1fr;gap:1.5rem}
+  .teacher-grid-featured{grid-template-columns:repeat(2,minmax(0,1fr))}
   .about-grid{grid-template-columns:1fr;gap:2rem}
   .footer-inner{grid-template-columns:1fr;gap:2rem}
   .footer-nav{justify-content:flex-start}
   .cta-inner{flex-direction:column;align-items:flex-start}
 }
 @media (max-width:720px){
-  .tribute-hero{grid-template-columns:1fr;gap:2rem}
-  .tribute-hero .portrait{max-width:240px;aspect-ratio:4/5}
-  .pf-card{grid-template-columns:1fr}
+  .tribute-hero{
+    grid-template-columns:1fr;gap:1.5rem;
+    margin-top:.5rem;padding:1.25rem;
+    border:1px solid var(--tribute-border);border-left:3px solid var(--tribute-accent);
+  }
+  .tribute-hero .portrait{max-width:280px;aspect-ratio:4/5}
+  .tribute-body{gap:1rem;padding:1.5rem 0}
+  .tribute-body > .tribute-prose,.tribute-body > aside{
+    min-width:0;padding:1.1rem;
+    border:1px solid var(--tribute-border);border-left:3px solid var(--tribute-accent);
+    background:linear-gradient(145deg,var(--tribute-wash),#fffefa 38%);
+  }
+  .tribute-body h2{margin-bottom:1rem;padding-bottom:.6rem}
+  .appreciate-item{padding:.85rem 0}
+  .pf-card{display:flex;flex-direction:column;min-width:0}
+  .pf-portrait,.pf-body{width:100%;min-width:0}
   .pf-portrait{padding:1.25rem 1.25rem 0}
-  .pf-portrait .portrait{aspect-ratio:4/3;max-height:220px}
+  .pf-portrait .portrait{aspect-ratio:4/5}
   .pf-body{padding:1.5rem 1.25rem 1.75rem}
+  .pf-body h2,.pf-note{overflow-wrap:anywhere}
   .student-grid{grid-template-columns:1fr;gap:2rem}
-  .student-grid .portrait{max-width:220px}
+  .student-grid .portrait{max-width:280px}
   .toolbar{flex-direction:column;align-items:stretch}
-  .search{max-width:none}
-  .tribute-pager{flex-direction:column;gap:1.5rem}
-  .pager-link,.pager-link.next{max-width:100%;text-align:left;align-items:flex-start;margin-left:0}
+  .search{max-width:none;flex:0 0 46px}
+  .tribute-pager{flex-direction:column;gap:.75rem}
+  .pager-link,.pager-link.next{
+    max-width:100%;width:100%;text-align:left;align-items:flex-start;margin-left:0;
+    padding:.8rem 1rem;border:1px solid var(--tribute-border);
+    border-left:3px solid var(--tribute-accent);
+  }
 }
 @media (max-width:520px){
   .header-inner{height:64px}
@@ -949,7 +1006,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
 <!-- ============================ OPENING SEQUENCE ============================ -->
 <div class="opening" id="opening" aria-hidden="true">
   <div class="opening-inner">
-    <p class="opening-date">5 September 2026</p>
+    <p class="opening-date">5 October 2026</p>
     <h1 class="opening-title">Teachers' Day 2026</h1>
     <div class="opening-rule"></div>
     <p class="opening-sig">
@@ -1004,7 +1061,6 @@ a:hover .link-arrow span{transform:translateX(4px)}
 </div>
 
 <!-- ============================ APP ============================ -->
-<div class="mouse-glow" aria-hidden="true"></div>
 <main id="main" tabindex="-1"></main>
 
 <!-- ============================ FOOTER ============================ -->
@@ -1015,7 +1071,7 @@ a:hover .link-arrow span{transform:translateX(4px)}
       <p class="footer-sub">A tribute by Faizan Ahmed · Class IX C</p>
       <p class="footer-note">
         A personal tribute made by a student for his teachers and his Principal.
-        Photographs will be added later — every written tribute on this site is written by the student.
+        Some photographs are included; others will be added when available. Every written tribute on this site is written by the student.
       </p>
     </div>
     <nav class="footer-nav" aria-label="Footer">
@@ -1039,20 +1095,8 @@ a:hover .link-arrow span{transform:translateX(4px)}
    site updates automatically.
 
    TO ADD A REAL PHOTOGRAPH:
-     1. Save the picture as a .jpg file.
-     2. Put it in the correct folder:
-
-        images/teachers/miss-saima.jpg
-        images/teachers/miss-samina.jpg
-        images/teachers/miss-arifa.jpg
-        images/teachers/miss-qurtulain.jpg
-        images/teachers/miss-mehwish.jpg
-        images/teachers/miss-uzma.jpg
-        images/teachers/miss-zarin.jpg
-        images/teachers/madam-nighat-maqsood.jpg
-        images/student/faizan-ahmed.jpg
-
-     3. The file name must match the "photo" value below.
+      1. Save the picture beside index.html.
+      2. The file name and letter case must match the "photo" value below.
      If the file is missing, the "Photograph coming soon"
      placeholder is shown and nothing breaks.
 
@@ -1064,13 +1108,13 @@ a:hover .link-arrow span{transform:translateX(4px)}
 
 const siteConfig = {
   title: "Teachers' Day 2026",
-  dateLabel: "5 September 2026",
+  dateLabel: "5 October 2026",
   studentName: "Faizan Ahmed",
   studentClass: "IX C"
 };
 
 const principal = {
-  name: "Maam Nighat Maqsood",
+  name: "Madam Nighat Maqsood",
   position: "Principal",
   photo: "Principal.jpg",
   tribute: "Madam Nighat Maqsood, your presence in school feels like quiet strength and steady guidance. You lead with dignity, calmness, and a deep sense of responsibility, and every student feels your care even in the simplest moments. Under your leadership, the school does not just teach lessons; it teaches values, discipline, and respect.\n\nYou remind us that a true leader is not only strict when needed, but also kind when it matters most. Your words inspire confidence, your actions teach maturity, and your example shapes the character of many students. Thank you for creating an environment where learning feels safe, meaningful, and motivating. We are grateful for the way you protect, guide, and encourage us every single day.",
@@ -1113,7 +1157,7 @@ const teachers = [
     name: "Miss Arifa",
     subject: "Urdu",
     classTeacher: false,
-    photo: "Miss Arifa.jpg",
+    photo: "miss Arifa.jpg",
     tribute: "Miss Arifa, Urdu is more than a subject in your classroom; it is a language of beauty, emotion, and expression. You taught us to appreciate the richness of words and the grace of poetry. With your guidance, even difficult language lessons felt meaningful and full of life.\n\nYou taught us how to write with feeling, read with understanding, and speak with respect. Your class was a place where language became more than text — it became culture, identity, and heart. Thank you for helping us connect with our language in a way that is both thoughtful and beautiful.",
     appreciation: [
       "Your love for the Urdu language and literature",
@@ -1180,9 +1224,7 @@ const studentPhoto = "Faizan.jpeg";
 /* Editable narrative text used across the site. */
 const copy = {
   heroHeadline: 'For the teachers who make <em>learning</em> meaningful.',
-  heroLede:
-    "A personal Teachers' Day tribute from Faizan Ahmed, Class IX C.",
-  introHeading: "Before you turn the page",
+  introHeading: "Why I made this",
   introBody: [
     "Teachers' Day is a day to say out loud what we usually only think. This site is my way of saying it properly.",
     "Each of my seven teachers has a page of her own. Some sections are still waiting for my words — those are marked clearly, so I can write them in my own time rather than fill them with something that is not true.",
@@ -1196,9 +1238,9 @@ const copy = {
     "This website was created by Faizan Ahmed of Class IX C as a personal Teachers' Day tribute. It is not a school project, an official publication, or a commercial website — it is simply a student's way of thanking the people who teach him every day.",
     "The site is organised like a small book. It opens with an introduction, then moves through the seven teachers in my class, then to a separate tribute for our Principal, Madam Nighat Maqsood, and finally to a page about the student who made it.",
   ],
-  studentIntro: "My name is Faizan Ahmed, and I am a student of Class IX C. I have intrest in IT FIELDS. I created this tribute because I wanted to thank the teachers who teach me, guide me, and help me become a better student and a better person.",
-  studentMessage: "This website is my small expression of gratitude. It is not just about words on a page — it is a way of showing respect, love, and appreciation for the people who make learning meaningful every day.",
-  studentWhy: "I made this tribute because teachers deserve to be remembered, appreciated, and respected. Their effort, patience, and guidance shape us more than we often realise, and I wanted to thank them in a way that feels personal and sincere."
+  studentIntro: "My name is Faizan Ahmed, and I am a student of Class IX C. I am also interested in IT fields. I am a curious learner who values discipline, effort, and respect. I created this tribute to express my gratitude to the teachers who guide me in my journey.",
+  studentMessage: "Teachers do much more than explain lessons. They build confidence, teach values, and help students grow in ways that stay with them for life. This tribute is my way of saying thank you for every lesson, every correction, and every moment of encouragement.",
+  studentWhy: "I created this website because I wanted to honour the people whose guidance has shaped my school life. They deserve appreciation, and I wanted to give them a place of respect and gratitude in my own words."
 };
 
 const tributePlaceholder = "Faizan's personal message will be added here.";
@@ -1244,6 +1286,28 @@ const motifKeyBySubject = {
 
 const findTeacher = (slug) => teachers.find(t => t.slug === slug) || null;
 
+function teacherIntro(t) {
+  const firstParagraph = (t.tribute || '').split(/\n{2,}/)[0];
+  const sentenceEnd = firstParagraph.search(/[.!?](?:\s|$)/);
+  return sentenceEnd < 0 ? firstParagraph : firstParagraph.slice(0, sentenceEnd + 1);
+}
+
+function teacherCardHTML(t, featured = false, index = 0) {
+  return `
+    <article class="teacher-card${featured ? ' teacher-card-featured' : ''} reveal" data-name="${esc(t.name.toLowerCase())}" data-subject="${esc(t.subject)}" data-delay="${index * 70}">
+      ${portraitHTML(t, t.name, false)}
+      <div class="card-body">
+        <h3>${esc(t.name)}</h3>
+        <p class="card-subj">${esc(t.subject)}</p>
+        <div class="card-badges">
+          ${t.classTeacher ? '<span class="badge badge-gold">Class Teacher</span>' : ''}
+        </div>
+        <p class="teacher-intro">${esc(teacherIntro(t))}</p>
+        <a class="btn btn-card" href="#/teacher/${esc(t.slug)}">View Tribute <span aria-hidden="true">→</span></a>
+      </div>
+    </article>`;
+}
+
 /* ============================================================
    PORTRAIT
    ============================================================ */
@@ -1264,8 +1328,11 @@ function portraitHTML(item, altName, eager) {
 }
 
 function initPortraits(root) {
-  root.querySelectorAll('.portrait-img').forEach(img => {
-    const markLoaded = () => img.classList.add('is-loaded');
+  root.querySelectorAll('.portrait-img, .print-photo-img').forEach(img => {
+    const markLoaded = () => {
+      img.classList.add('is-loaded');
+      if (img.classList.contains('print-photo-img')) img.parentElement.classList.add('has-image');
+    };
     const dropImage = () => { if (img.parentNode) img.parentNode.removeChild(img); };
 
     if (img.complete) {
@@ -1416,16 +1483,57 @@ function appreciationHTML(item) {
     </li>`).join('') + `</ul>`;
 }
 
-const printHeaderHTML = () => `
-  <div class="print-header">
-    <span>${esc(siteConfig.title)}</span>
-    <span>A tribute by ${esc(siteConfig.studentName)} · Class ${esc(siteConfig.studentClass)}</span>
-  </div>`;
+function printPhotoHTML(item) {
+  const name = String(item.name || '').replace(/^(Miss|Madam|Maam)\s+/i, '').trim();
+  const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+  const image = item.photo
+    ? `<img class="print-photo-img" src="${esc(item.photo)}" alt="Portrait of ${esc(item.name)}" decoding="async">`
+    : '';
+  return `<div class="print-photo"><span class="print-initials" aria-hidden="true">${esc(initials)}</span>${image}</div>`;
+}
 
-const printFooterHTML = () => `
-  <div class="print-footer">
-    Teachers' Day 2026 · A personal tribute by ${esc(siteConfig.studentName)}, Class ${esc(siteConfig.studentClass)}
-  </div>`;
+function printOptionalSection(title, content) {
+  const paragraphs = Array.isArray(content) ? content : [content];
+  const text = paragraphs.map(value => String(value || '').trim()).filter(Boolean);
+  if (!text.length) return '';
+  return `<section class="print-section print-optional"><h3>${esc(title)}</h3>${text.map(value => `<p>${esc(value)}</p>`).join('')}</section>`;
+}
+
+function printTributeHTML(item, role) {
+  const appreciation = Array.isArray(item.appreciation)
+    ? item.appreciation.filter(value => typeof value === 'string' && value.trim() && !/^\[.*\]$/.test(value.trim()))
+    : [];
+  const tribute = String(item.tribute || '').trim();
+  const thankYou = (tribute.match(/[^.!?]*\bthank you\b[^.!?]*(?:[.!?]|$)/i) || [])[0] || '';
+  const tributeBody = thankYou ? tribute.replace(thankYou, '').trim() : tribute;
+  const learned = item.learned || item.whatILearned || '';
+  const memorableMoment = item.memorableMoment || '';
+
+  return `
+    <section class="print-sheet" aria-label="Printable Teachers' Day tribute to ${esc(item.name)}" style="--print-accent:var(--tribute-accent)">
+      <header class="print-brand">
+        <p class="print-date">${esc(siteConfig.dateLabel)}</p>
+        <h1>Teachers' Day 2026</h1>
+        <p class="print-byline">A Tribute by ${esc(siteConfig.studentName)} · Class ${esc(siteConfig.studentClass)}</p>
+      </header>
+      <section class="print-identity">
+        ${printPhotoHTML(item)}
+        <div>
+          <h2>${esc(item.name)}</h2>
+          ${role ? `<p class="print-role">${esc(role)}</p>` : ''}
+        </div>
+      </section>
+      ${tributeBody ? `<section class="print-section print-tribute"><h3>A Tribute</h3>${tributeProseHTML({ tribute: tributeBody })}</section>` : ''}
+      ${appreciation.length ? `<section class="print-section"><h3>What I Appreciate</h3><ol class="print-appreciation">${appreciation.map((value, index) => `<li><span class="num">${String(index + 1).padStart(2, '0')}</span><span>${esc(value)}</span></li>`).join('')}</ol></section>` : ''}
+      ${printOptionalSection('What I Learned', learned)}
+      ${printOptionalSection('Memorable Moment', memorableMoment)}
+      <div class="print-closing">
+        ${thankYou ? `<section class="print-thanks"><h3>Thank You</h3><p>${esc(thankYou.trim())}</p></section>` : ''}
+        <div class="print-signoff"><p>With Respect</p><p class="print-author">${esc(siteConfig.studentName)} · Class ${esc(siteConfig.studentClass)}</p></div>
+        <footer class="print-footer">Teachers' Day 2026 · A Personal Tribute by ${esc(siteConfig.studentName)} · Class ${esc(siteConfig.studentClass)}</footer>
+      </div>
+    </section>`;
+}
 
 /* ============================================================
    PAGE: HOME
@@ -1455,25 +1563,23 @@ function renderHome() {
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow on-dark reveal">Teachers' Day · 2026</p>
-        <h1 class="reveal" data-delay="60">${copy.heroHeadline}</h1>
-        <p class="lede on-dark reveal" data-delay="120">${esc(copy.heroLede)}</p>
+        <p class="eyebrow on-dark reveal">${esc(siteConfig.dateLabel)}</p>
+        <h1 class="reveal" data-delay="60">Teachers' Day 2026</h1>
+        <p class="hero-caption reveal" data-delay="90">${copy.heroHeadline}</p>
+        <p class="hero-byline reveal" data-delay="120">A tribute by ${esc(siteConfig.studentName)} · Class ${esc(siteConfig.studentClass)}</p>
+        <p class="lede on-dark reveal" data-delay="150">${esc(copy.introBody[0])}</p>
 
-        <p class="fact-line reveal" data-delay="150" aria-label="Seven teachers, one principal, one student, one tribute">
+        <p class="fact-line reveal" data-delay="180" aria-label="Seven teachers, one principal, one student, one tribute">
           <span>7 Teachers</span><span class="dot" aria-hidden="true"></span>
           <span>1 Principal</span><span class="dot" aria-hidden="true"></span>
           <span>1 Student</span><span class="dot" aria-hidden="true"></span>
           <span>1 Tribute</span>
         </p>
 
-        <div class="hero-actions reveal" data-delay="180">
-          <a class="btn btn-gold" href="#/teachers">Meet My Teachers</a>
-          <button class="btn btn-outline-light" type="button" id="openTribute">Open the Tribute</button>
+        <div class="hero-actions reveal" data-delay="210">
+          <a class="btn btn-gold" href="#/teachers">Meet My Teachers <span aria-hidden="true">→</span></a>
+          <button class="btn btn-outline-light" type="button" id="readMyTribute">Read My Tribute</button>
         </div>
-
-        <p class="hero-sig reveal" data-delay="220">
-          Faizan Ahmed <small>IX C</small>
-        </p>
       </div>
 
       <aside class="contents-card reveal" data-delay="140" aria-label="Contents">
@@ -1486,7 +1592,7 @@ function renderHome() {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="why-this-tribute">
     <div class="wrap intro-grid">
       <div class="reveal">
         <p class="eyebrow">Introduction</p>
@@ -1500,6 +1606,21 @@ function renderHome() {
           <small>Class ${esc(siteConfig.studentClass)} · Creator of this tribute</small>
         </p>
       </div>
+    </div>
+  </section>
+
+  <section class="section featured-teachers">
+    <div class="wrap">
+      <div class="intro-grid featured-heading">
+        <div>
+          <p class="eyebrow">A few of the people I thank</p>
+          <h2>My teachers, in their own chapters.</h2>
+          <span class="rule-gold"></span>
+        </div>
+        <p class="lede">Each tribute is written for one teacher, with gratitude for the lessons she has shared.</p>
+      </div>
+      <div class="teacher-grid teacher-grid-featured">${teachers.slice(0, 3).map((t, i) => teacherCardHTML(t, true, i)).join('')}</div>
+      <p class="featured-more"><a class="btn btn-outline" href="#/teachers">Meet all seven teachers <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
 
@@ -1534,23 +1655,7 @@ function renderHome() {
    ============================================================ */
 function renderTeachers() {
   const subjects = [...new Set(teachers.map(t => t.subject))];
-
-  const cards = teachers.map(t => `
-    <article class="teacher-card reveal" data-name="${esc(t.name.toLowerCase())}" data-subject="${esc(t.subject)}">
-      <a class="card-link" href="#/teacher/${esc(t.slug)}">
-        ${portraitHTML(t, t.name, false)}
-        <div class="card-body">
-          <h3>${esc(t.name)}</h3>
-          <p class="card-subj">${esc(t.subject)}</p>
-          <div class="card-badges">
-            ${t.classTeacher ? '<span class="badge badge-gold">Class Teacher</span>' : ''}
-          </div>
-          <div class="card-cta">
-            <span class="link-arrow">Open Tribute <span aria-hidden="true">→</span></span>
-          </div>
-        </div>
-      </a>
-    </article>`).join('');
+  const cards = teachers.map((t, i) => teacherCardHTML(t, false, i)).join('');
 
   const chips = ['All', ...subjects].map((s, i) => `
     <button class="chip${i === 0 ? ' is-active' : ''}" data-filter="${esc(s)}" type="button">${esc(s)}</button>
@@ -1608,11 +1713,10 @@ function renderTeacher(slug) {
   const prev = teachers[(index - 1 + teachers.length) % teachers.length];
   const next = teachers[(index + 1) % teachers.length];
   const motifKey = motifKeyBySubject[t.subject] || 'english';
+  const role = [t.classTeacher ? 'Class Teacher' : '', t.subject].filter(Boolean).join(' · ');
 
   return `
   <article class="tribute-page" data-subject="${esc(motifKey)}">
-    ${printHeaderHTML()}
-
     <div class="wrap breadcrumb no-print">
       <a href="#/teachers">My Teachers</a>
       <span class="sep" aria-hidden="true">/</span>
@@ -1648,7 +1752,7 @@ function renderTeacher(slug) {
     <div class="wrap">
       <div class="tribute-actions no-print">
         <button class="btn btn-gold" type="button" data-share="${esc(t.name)}">Share Tribute</button>
-        <button class="btn btn-outline" type="button" data-print>Print Tribute</button>
+        <button class="btn btn-outline" type="button" data-print>Print This Tribute</button>
         <a class="btn btn-outline" href="#/teachers">Back to Teachers</a>
       </div>
 
@@ -1664,7 +1768,7 @@ function renderTeacher(slug) {
       </nav>
     </div>
 
-    ${printFooterHTML()}
+    ${printTributeHTML(t, role)}
   </article>`;
 }
 
@@ -1674,8 +1778,6 @@ function renderTeacher(slug) {
 function renderPrincipal() {
   return `
   <article class="tribute-page" data-subject="principal">
-    ${printHeaderHTML()}
-
     <div class="wrap breadcrumb no-print">
       <a href="#/teachers">My Teachers</a>
       <span class="sep" aria-hidden="true">/</span>
@@ -1709,12 +1811,12 @@ function renderPrincipal() {
     <div class="wrap">
       <div class="tribute-actions no-print">
         <button class="btn btn-gold" type="button" data-share="${esc(principal.name)}">Share Tribute</button>
-        <button class="btn btn-outline" type="button" data-print>Print Tribute</button>
+        <button class="btn btn-outline" type="button" data-print>Print This Tribute</button>
         <a class="btn btn-outline" href="#/teachers">Back to Teachers</a>
       </div>
     </div>
 
-    ${printFooterHTML()}
+    ${printTributeHTML(principal, principal.position)}
   </article>`;
 }
 
@@ -1758,24 +1860,24 @@ function renderMe() {
     <div class="wrap">
       <div class="student-block reveal">
         <h2>About Me</h2>
-        <div class="slot"><span>My name is Faizan Ahmed, and I am a student of Class IX C. And also I am interested in IT fields. I am a curious learner who values discipline, effort, and respect. I created this tribute to express my gratitude to the teachers who guide me in my journey.</span></div>
+        ${introBlock}
       </div>
 
       <div class="student-block reveal">
         <h2>A Note From Me</h2>
-        <div class="slot"><span>Teachers do much more than explain lessons. They build confidence, teach values, and help students grow in ways that stay with them for life. This tribute is my way of saying thank you for every lesson, every correction, and every moment of encouragement.</span></div>
+        ${messageBlock}
       </div>
 
       <div class="student-block reveal">
         <h2>Why I Created This</h2>
-        <div class="slot"><span>I created this website because I wanted to honour the people whose guidance has shaped my school life. They deserve appreciation, and I wanted to give them a place of respect and gratitude in my own words.</span></div>
+        ${whyBlock}
       </div>
 
       <div class="student-block reveal" style="border-bottom:none;margin-bottom:0;padding-bottom:0">
         <h2>Made With Respect &amp; Gratitude</h2>
         <p>
           Every line on this website is meant as a quiet thank-you — nothing more, nothing less.
-          The photographs will be added when they are ready; until then, the pages stay honest.
+          Some photographs are included; the rest will be added when they are ready.
         </p>
       </div>
 
@@ -1974,27 +2076,10 @@ function wirePage(view) {
   });
 
   if (view === 'home') {
-    const openBtn = document.getElementById('openTribute');
-    if (openBtn) {
-      openBtn.addEventListener('click', () => {
-        /* Elegant page-opening transition into the directory. */
-        if (reduceMotion) {
-          location.hash = '#/teachers';
-          return;
-        }
-        app.style.transition = 'opacity .35s ease, transform .55s cubic-bezier(.4,0,.2,1)';
-        app.style.opacity = '0';
-        app.style.transform = 'translateY(-10px)';
-        setTimeout(() => {
-          location.hash = '#/teachers';
-          requestAnimationFrame(() => {
-            app.style.opacity = '';
-            app.style.transform = '';
-            setTimeout(() => { app.style.transition = ''; }, 700);
-          });
-        }, 380);
-      });
-    }
+    const readBtn = document.getElementById('readMyTribute');
+    if (readBtn) readBtn.addEventListener('click', () => {
+      document.getElementById('why-this-tribute')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
   }
 
   if (view === 'teachers') {
@@ -2133,11 +2218,13 @@ function closeMenu() {
   menuToggle.setAttribute('aria-expanded', 'false');
   menuToggle.setAttribute('aria-label', 'Open menu');
   mobileMenu.classList.remove('is-open');
+  document.body.classList.remove('menu-open');
 }
 function openMenu() {
   menuToggle.setAttribute('aria-expanded', 'true');
   menuToggle.setAttribute('aria-label', 'Close menu');
   mobileMenu.classList.add('is-open');
+  document.body.classList.add('menu-open');
 }
 
 menuToggle.addEventListener('click', () => {
@@ -2150,7 +2237,10 @@ mobileMenu.querySelectorAll('a').forEach(link => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeMenu();
+  if (e.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+    closeMenu();
+    menuToggle.focus();
+  }
 });
 
 window.addEventListener('resize', () => {
@@ -2160,22 +2250,6 @@ window.addEventListener('resize', () => {
 /* ============================================================
    BOOT
    ============================================================ */
-const pointerGlow = document.querySelector('.mouse-glow');
-if (pointerGlow && !window.matchMedia('(pointer: coarse)').matches) {
-  document.body.classList.add('has-mouse-glow');
-
-  const moveGlow = (event) => {
-    pointerGlow.style.left = `${event.clientX}px`;
-    pointerGlow.style.top = `${event.clientY}px`;
-    pointerGlow.style.opacity = '1';
-  };
-
-  document.addEventListener('pointermove', moveGlow);
-  document.addEventListener('pointerleave', () => {
-    pointerGlow.style.opacity = '0';
-  });
-}
-
 window.addEventListener('hashchange', render);
 
 if (!location.hash) {
